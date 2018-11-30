@@ -26,20 +26,26 @@ form  {
 			display: flex;
 			flex-direction: column;
 			
-			label {
-				margin: 5px 0 2px;
-			}
+			.input-container {
 			
-			input {
-				~small {
-					display: none;
+			display: flex;
+			flex-direction: column;
+
+				label {
+					margin: 5px 0 2px;
 				}
-
-				&.invalid {
-					border: 2px solid red;
-
+				
+				input {
 					~small {
-						display: block;
+						display: none;
+					}
+					
+					&.invalid {
+						border: 2px solid red;
+						
+						~small {
+							display: block;
+						}
 					}
 				}
 			}

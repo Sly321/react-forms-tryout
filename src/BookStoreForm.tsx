@@ -90,10 +90,12 @@ export default class BookStoreForm extends React.Component<Props, State> {
 							<Field
 								name="isbnNummer"
 								validate={(val) => isbnValidation.validate(val)}
-								render={({ input, meta }) => (<>
-									<Input id="isbn-nummer" label="ISBN-Nummer" {...fieldRenderToInputProps({ input, meta })} />
-									{this.debug(<pre>{JSON.stringify(meta, null, 2)}</pre>)}
-								</>)}
+								render={({ input, meta }) => {
+									return (<>
+										<Input id="isbn-nummer" label="ISBN-Nummer" {...fieldRenderToInputProps({ input, meta })} />
+										{this.debug(<pre>{JSON.stringify(meta, null, 2)}</pre>)}
+									</>)
+								}}
 							/>
 						</section>
 					</div>

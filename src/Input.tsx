@@ -25,7 +25,7 @@ export default class Input extends React.Component<Props, State> {
 
 	render() {
 		const { label, id, value, error, touched, onFocus, onBlur } = this.props
-		return <>
+		return <div className="input-container">
 			<label htmlFor={id}>
 				{label}
 			</label>
@@ -39,7 +39,7 @@ export default class Input extends React.Component<Props, State> {
 				onBlur={() => onBlur && onBlur()}
 			/>
 			{touched && error && <small>{this.error}</small>}
-		</>
+		</div>
 	}
 
 	private get error(): string {

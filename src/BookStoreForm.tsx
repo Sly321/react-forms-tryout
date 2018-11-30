@@ -1,9 +1,9 @@
 import * as React from "react"
+import { Field, Form, FieldRenderProps } from "react-final-form"
 import Input from "./Input"
-import { Form, Field } from "react-final-form"
-import Valdiation, { composeValidators } from "./validation/Validation"
-import RequiredValidator from "./validation/RequiredValidator"
 import ISBNValidator from "./validation/ISBNValidator"
+import RequiredValidator from "./validation/RequiredValidator"
+import Valdiation from "./validation/Validation"
 
 export interface Props {
 	children?: React.ReactNode
@@ -13,7 +13,13 @@ export interface State {
 }
 
 const reqValidation = new Valdiation(RequiredValidator)
+const isbjValidation = new Valdiation(RequiredValidator, ISBNValidator)
 //const required = (value: string) => (value ? undefined : true);
+
+function fieldRenderToInputProps(props: FieldRenderProps) {
+	const { input: { onBlur, onFocus, onChange, value, name }, meta: { invalid, error, touched, active } } = props
+	return { invalid, error, touched, active, onBlur, onFocus, onChange, value, name }
+}
 
 export default class BookStoreForm extends React.Component<Props, State> {
 	constructor(props: Props) {
@@ -24,14 +30,12 @@ export default class BookStoreForm extends React.Component<Props, State> {
 	}
 
 	private handleSubmit() {
-
 	}
 
 	render() {
 		return <Form
 			onSubmit={this.handleSubmit}
-			validateOnBlur
-			render={({ handleSubmit, submitting, values, }) => (
+			render={({ handleSubmit, submitting, values, pristine, reset }) => (
 				<form onSubmit={handleSubmit}>
 					<h1>Buchbestellung</h1>
 					<hr />
@@ -46,11 +50,7 @@ export default class BookStoreForm extends React.Component<Props, State> {
 									<Input
 										id="vorname"
 										label="Vorname"
-										onChange={input.onChange}
-										value={input.value}
-										invalid={meta.invalid}
-										error={meta.error}
-										touched={meta.touched}
+										{...fieldRenderToInputProps({ input, meta })}
 									/>
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
@@ -62,11 +62,7 @@ export default class BookStoreForm extends React.Component<Props, State> {
 									<Input
 										id="nachname"
 										label="Nachname"
-										onChange={input.onChange}
-										value={input.value}
-										invalid={meta.invalid}
-										error={meta.error}
-										touched={meta.touched}
+										{...fieldRenderToInputProps({ input, meta })}
 									/>
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
@@ -78,25 +74,22 @@ export default class BookStoreForm extends React.Component<Props, State> {
 							<hr />
 							<Field
 								name="isbjNummer"
-								validate={(val) => composeValidators(RequiredValidator, ISBNValidator)(val)}
+								validate={(val) => isbjValidation.validate(val)}
 								render={({ input, meta }) => (<>
 									<Input
 										id="isbj-nummer"
 										label="ISBJ-Nummer"
-										onChange={input.onChange}
-										value={input.value}
-										invalid={meta.invalid}
-										error={meta.error}
-										touched={meta.touched}
+										{...fieldRenderToInputProps({ input, meta })}
 									/>
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
 							/>
 						</section>
 					</div>
-					<button type="submit" disabled={submitting}>
-						Bestellen
-              		</button>
+					<div className="button-container">
+						<button type="button" disabled={submitting || pristine} onClick={reset}>Formular leeren</button>
+						<button disabled={submitting}>Bestellen</button>
+					</div>
 					<pre>{JSON.stringify(values, null, 2)}</pre>
 				</form>
 			)}

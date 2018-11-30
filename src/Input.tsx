@@ -6,10 +6,13 @@ export interface Props {
 	label: string,
 	id: string,
 	value: string,
-	onChange(value: string): void
 	invalid?: boolean
 	error?: string | ErrorFunction
 	touched?: boolean
+	active?: boolean
+	onChange(value: string): void
+	onFocus?(): void
+	onBlur?(): void
 }
 
 export interface State {
@@ -21,16 +24,19 @@ export default class Input extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { label, id, value, error, touched } = this.props
+		const { label, id, value, error, touched, onFocus, onBlur } = this.props
 		return <>
 			<label htmlFor={id}>
 				{label}
 			</label>
 			<input
+				autoComplete="off"
 				id={id}
 				className={this.className}
 				value={value}
 				onChange={this.handleChange}
+				onFocus={() => onFocus && onFocus()}
+				onBlur={() => onBlur && onBlur()}
 			/>
 			{touched && error && <small>{this.error}</small>}
 		</>
@@ -40,7 +46,9 @@ export default class Input extends React.Component<Props, State> {
 		const { error, label } = this.props
 		if (error) {
 			if (Array.isArray(error)) {
-				return error.reduce((r, e) => r + e(label), "")
+				// nur den ersten
+				return (typeof error[0] === "function" ? error[0](label) : error[0])
+				//return error.reduce((r, e) => r + (typeof e === "function" ? e(label) : e), "")
 			}
 
 			if (typeof error === "string") {
@@ -52,9 +60,9 @@ export default class Input extends React.Component<Props, State> {
 
 	private get className(): string {
 		const classNames: Array<string> = []
-		const { touched, invalid } = this.props
+		const { touched, invalid, active } = this.props
 
-		if (touched && invalid) {
+		if (touched && (invalid && !active)) {
 			classNames.push("invalid")
 		}
 

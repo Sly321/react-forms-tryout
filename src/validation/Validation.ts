@@ -1,5 +1,11 @@
 import Validator from "./Validator"
 
+/**
+ * Class Implementation for a Validation
+ *
+ * @export
+ * @class Valdiation
+ */
 export default class Valdiation {
 	private validations: Array<Validator>
 
@@ -7,6 +13,12 @@ export default class Valdiation {
 		this.validations = args
 	}
 
+	/**
+	 * Never used so far.
+	 *
+	 * @param {...Array<Validator>} args
+	 * @memberof Valdiation
+	 */
 	public add(...args: Array<Validator>) {
 		this.validations = this.validations.concat(...args)
 	}
@@ -17,11 +29,12 @@ export default class Valdiation {
 			return validationResult ? prev.concat(validationResult) : prev
 		}, [])
 
-		console.debug(res)
-
 		return res.length === 0 ? false : res
 	}
 }
 
-export const composeValidators = (...validators: Array<Validator>) => (value: string) =>
-	validators.reduce((error, validator) => error || validator.validate(value), undefined);
+
+export const composeValidators = (...validators: Array<Validator>) =>
+	(value: string, allValue?: any) =>
+		validators.reduce((error, validator) =>
+			error || validator.validate(value, allValue), undefined);

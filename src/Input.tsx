@@ -46,13 +46,15 @@ export default class Input extends React.Component<Props, State> {
 		const { error, label } = this.props
 		if (error) {
 			if (Array.isArray(error)) {
-				// nur den ersten
-				return (typeof error[0] === "function" ? error[0](label) : error[0])
-				//return error.reduce((r, e) => r + (typeof e === "function" ? e(label) : e), "")
+				return error.reduce((r, e) => r + (typeof e === "function" ? e(label) : e), "")
 			}
 
 			if (typeof error === "string") {
 				return error
+			}
+
+			if (typeof error === "function") {
+				return error(label)
 			}
 		}
 		return ""
@@ -63,6 +65,7 @@ export default class Input extends React.Component<Props, State> {
 		const { touched, invalid, active } = this.props
 
 		if (touched && (invalid && !active)) {
+			console.debug(`eigentlich bin ich ja nicht so active`, active, this.props.label)
 			classNames.push("invalid")
 		}
 

@@ -13,7 +13,7 @@ export interface State {
 }
 
 const reqValidation = new Valdiation(RequiredValidator)
-const isbjValidation = new Valdiation(RequiredValidator, ISBNValidator)
+const isbnValidation = new Valdiation(RequiredValidator, ISBNValidator)
 //const required = (value: string) => (value ? undefined : true);
 
 function fieldRenderToInputProps(props: FieldRenderProps) {
@@ -47,11 +47,7 @@ export default class BookStoreForm extends React.Component<Props, State> {
 								name="vorname"
 								validate={(val) => reqValidation.validate(val)}
 								render={({ input, meta }) => (<>
-									<Input
-										id="vorname"
-										label="Vorname"
-										{...fieldRenderToInputProps({ input, meta })}
-									/>
+									<Input id="vorname" label="Vorname" {...fieldRenderToInputProps({ input, meta })} />
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
 							/>
@@ -59,11 +55,7 @@ export default class BookStoreForm extends React.Component<Props, State> {
 								name="nachname"
 								validate={(val) => reqValidation.validate(val)}
 								render={({ input, meta }) => (<>
-									<Input
-										id="nachname"
-										label="Nachname"
-										{...fieldRenderToInputProps({ input, meta })}
-									/>
+									<Input id="nachname" label="Nachname" {...fieldRenderToInputProps({ input, meta })} />
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
 							/>
@@ -73,14 +65,10 @@ export default class BookStoreForm extends React.Component<Props, State> {
 							<h2>Angaben zum Buch</h2>
 							<hr />
 							<Field
-								name="isbjNummer"
-								validate={(val) => isbjValidation.validate(val)}
+								name="isbnNummer"
+								validate={(val) => isbnValidation.validate(val)}
 								render={({ input, meta }) => (<>
-									<Input
-										id="isbj-nummer"
-										label="ISBJ-Nummer"
-										{...fieldRenderToInputProps({ input, meta })}
-									/>
+									<Input id="isbn-nummer" label="ISBN-Nummer" {...fieldRenderToInputProps({ input, meta })} />
 									<pre>{JSON.stringify(meta, null, 2)}</pre>
 								</>)}
 							/>
